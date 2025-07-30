@@ -1,87 +1,73 @@
-Simple Python Search Spider, Page Ranker, and Visualizer
+PageRank Algorithm Implementations
 
-This is a set of programs that emulate some of the functions of a 
-search engine. They store their data in a SQLITE3 database named
-'spider.sqlite'. This file can be removed at any time to restart the
-process.   
 
-You should install the SQLite browser to view and modify 
-the databases from:
+This repository contains multiple implementations of the PageRank algorithm, a link analysis algorithm used by Google Search to rank web pages in their search engine results. This project demonstrates different approaches to solving the same problem, from a foundational, "from scratch" implementation to more efficient versions utilizing popular data science libraries.
 
-http://sqlitebrowser.org/
+Project Highlights
+The project is structured to showcase different methods of implementing the PageRank algorithm. Each implementation tackles the problem with a different philosophy, highlighting a range of skills:
 
-This program crawls a web site and pulls a series of pages into the
-database, recording the links between pages.
+page_rank_from_scratch.py: This file contains a pure Python implementation of the PageRank algorithm. It is built without using external libraries like NumPy or Pandas, providing a clear and fundamental understanding of the algorithm's core mathematical logic.
 
-You can have multiple starting points in the same database - 
-within the program, these are called "webs". The spider
-chooses randomly amongst all non-visited links across all
-the webs.
+page_rank_numpy.py: This version leverages the NumPy library for matrix operations. By representing the web graph as a matrix, this implementation is significantly more performant and computationally efficient than the "from scratch" version.
 
-If you want to dump the contents of the spider.sqlite file, you can 
-run spdump.py as follows:
+page_rank_pandas.py: This implementation uses the Pandas library to handle and manipulate the data representing the web graph. It demonstrates proficiency in using Pandas DataFrames for data processing and analysis within a computational context.
 
-Mac: python3 spdump.py 
-Win: spdump.py
+How It Works
+The PageRank algorithm operates on a web graph, where each web page is a node and each hyperlink is a directed edge. The core idea is that a page is more important if it receives links from other important pages.
 
-This shows the number of incoming links, the old page rank, the new page
-rank, the id of the page, and the url of the page. The spdump.py program
-only shows pages that have at least one incoming link to them.
+The algorithm iteratively calculates a PageRank score for each page based on the following principles:
 
-Once you have a few pages in the database, you can run Page Rank on the
-pages using the sprank.py program. You simply tell it how many Page
-Rank iterations to run.
+A link from page A to page B is considered a "vote" for page B.
 
-Mac: python3 sprank.py 
-Win: sprank.py 
+The weight of this vote is determined by the PageRank score of page A.
 
-You can dump the database again to see that page rank has been updated:
+A "damping factor" is introduced to prevent the score from being monopolized by circular links, simulating a user who might randomly jump to a new page instead of following a link.
 
-Mac: python3 spdump.py 
-Win: spdump.py 
+Technologies Used
+Python 3.x
 
-You can run sprank.py as many times as you like and it will simply refine
-the page rank the more times you run it.  You can even run sprank.py a few times
-and then go spider a few more pages with spider.py and then run sprank.py
-to converge the page ranks.
+NumPy
 
-If you want to restart the Page Rank calculations without re-spidering the 
-web pages, you can use spreset.py
+Pandas
 
-Mac: python3 spreset.py 
-Win: spreset.py 
+Usage
+To run the different implementations, you'll need to have the required libraries installed.
 
-All pages set to a rank of 1.0
+Bash
 
-Mac: python3 sprank.py 
-Win: sprank.py 
+pip install numpy pandas
+To run the from-scratch version:
 
-For each iteration of the page rank algorithm it prints the average
-change per page of the page rank. The network initially is quite 
-unbalanced and so the individual page ranks are changing wildly.
-But in a few short iterations, the page rank converges.  You 
-should run sprank.py long enough that the page ranks converge.
+Bash
 
-If you want to visualize the current top pages in terms of page rank,
-run spjson.py to write the pages out in JSON format to be viewed in a
-web browser.
+python page_rank_from_scratch.py
+To run the NumPy version:
 
-Mac: python3 spjson.py 
-Win: spjson.py 
+Bash
 
-Creating JSON output on spider.js...
-How many nodes? 30
-Open force.html in a browser to view the visualization
+python page_rank_numpy.py
+To run the Pandas version:
 
-You can view this data by opening the file force.html in your web browser.  
-This shows an automatic layout of the nodes and links. You can click and 
-drag any node and you can also double click on a node to find the URL
-that is represented by the node.
+Bash
 
-This visualization is provided using the force layout from:
+python page_rank_pandas.py
+Each script should output the PageRank score for each node in the graph, as shown in the example below.
 
-http://mbostock.github.com/d3/
+Example Output
+Assuming a simple graph is hardcoded into the scripts, the output would look similar to this:
 
-If you rerun the other utilities and then re-run spjson.py - you merely
-have to press refresh in the browser to get the new data from spider.js.
+PageRank scores:
+A: 0.183
+B: 0.223
+C: 0.354
+D: 0.240
+(Note: Actual output will vary based on the specific graph and damping factor used in the code.)
 
+Future Work
+Integrate a command-line interface (CLI) to allow users to specify input graphs.
+
+Add a visualization component to display the graph and the PageRank scores.
+
+Implement a method for handling larger, more complex datasets.
+
+Refactor the page_rank_from_scratch.py implementation for better performance.
